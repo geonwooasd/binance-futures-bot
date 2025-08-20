@@ -1,0 +1,29 @@
+mode:
+  live: false
+  testnet: true
+exchange:
+  symbol: BTC/USDT
+  leverage: 5
+  margin_mode: ISOLATED
+  fee_rate: 0.0004
+strategy:
+  base_tf: 15m
+  htf: 1h
+  rsi_long_range: [55, 70]
+  rsi_short_range: [30, 45]
+  ema_fast: 20
+  ema_slow: 50
+  atr_period: 14
+  atr_mult: 1.8
+risk:
+  risk_per_trade: 0.01
+  max_daily_dd: -0.03
+  max_concurrent_positions: 2
+notify:
+  discord: true
+runtime:
+  kst_tz: Asia/Seoul
+  align_to_candle: true
+  run_on_minutes: [0, 15, 30, 45]
+storage:
+  state_file: data/state.json

@@ -1,0 +1,9 @@
+ccxt==4.3.31
+pandas==2.2.2
+numpy==1.26.4
+python-dotenv==1.0.1
+requests==2.32.3
+pytz==2024.1
+PyYAML==6.0.2
+loguru==0.7.2
+apscheduler==3.10.4
