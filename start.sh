@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-REPO_NAME="binance-futures-bot-template"
+REPO_NAME="."
 echo "Creating repo: ${REPO_NAME}"
 mkdir -p ${REPO_NAME}
 cd ${REPO_NAME}
