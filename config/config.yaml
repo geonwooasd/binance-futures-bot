@@ -23,7 +23,7 @@ notify:
   discord: true
 runtime:
   kst_tz: Asia/Seoul
-  align_to_candle: true
+  align_to_candle: false
   run_on_minutes: [0, 15, 30, 45]
 storage:
   state_file: data/state.json
