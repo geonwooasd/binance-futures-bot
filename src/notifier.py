@@ -10,7 +10,6 @@ def _post(url: str, payload: dict):
     if not url:
         print("[notify] no webhook configured")
         return
-    # wait=true로 동기 응답 받기 + UA 명시
     sep = "&" if "?" in url else "?"
     target = f"{url}{sep}wait=true"
     data = json.dumps(payload).encode("utf-8")

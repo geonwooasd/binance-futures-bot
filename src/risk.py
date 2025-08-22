@@ -26,20 +26,36 @@ def daily_dd_ok(state, equity_now: float, max_dd: float):
     if not base or base <= 0:
         return True, 0.0
     dd = (equity_now - base) / base
-    return dd >= max_dd, dd
+    return dd >= max_dd, dd  # True면 거래 가능
 
 def calc_qty_by_risk(df15, cfg, entry_price: float, side: str, equity: float):
+    mode = cfg["strategy"].get("stop_tp_mode", "atr")
+    if mode == "percent":
+        sp = float(cfg["strategy"]["stop_percent"])
+        if sp <= 0:
+            return 0.0, entry_price
+        if side == "LONG":
+            stop = entry_price * (1 - sp)
+            stop_dist = entry_price - stop
+        else:
+            stop = entry_price * (1 + sp)
+            stop_dist = stop - entry_price
+        risk_per_trade = cfg["risk"]["risk_per_trade"]
+        qty = (equity * risk_per_trade) / max(stop_dist, 1e-8)
+        return max(qty, 0.0), stop
+
+    # ATR 기반(보존)
     n = cfg["strategy"]["atr_period"]
     m = cfg["strategy"]["atr_mult"]
     _atr = atr(df15, n).iloc[-1]
-    if _atr is None or not (_atr == _atr) or _atr <= 0:  # NaN 체크
+    if _atr is None or not (_atr == _atr) or _atr <= 0:
         return 0.0, entry_price
     if side == "LONG":
         stop = entry_price - m * _atr
-        stop_dist = entry_price - stop
+        stop_dist = m * _atr
     else:
         stop = entry_price + m * _atr
-        stop_dist = stop - entry_price
+        stop_dist = m * _atr
     risk_per_trade = cfg["risk"]["risk_per_trade"]
     qty = (equity * risk_per_trade) / max(stop_dist, 1e-8)
     return max(qty, 0.0), stop

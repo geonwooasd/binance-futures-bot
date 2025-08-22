@@ -1,29 +1,56 @@
 mode:
-  live: false
+  live: false        # 가상매매만
   testnet: true
+
 exchange:
   symbol: BTC/USDT
   leverage: 5
   margin_mode: ISOLATED
-  fee_rate: 0.0004
+  fee_rate: 0.0004   # 왕복 수수료 근사치
+
 strategy:
   base_tf: 15m
   htf: 1h
-  rsi_long_range: [55, 70]
-  rsi_short_range: [30, 45]
   ema_fast: 20
   ema_slow: 50
+  rsi_long_range: [55, 70]
+  rsi_short_range: [30, 45]
   atr_period: 14
   atr_mult: 1.8
+
+  # 퍼센트 기반 TP/SL
+  stop_tp_mode: percent       # percent | atr
+  stop_percent: 0.02          # 손절 -2%
+  take_profit_percent: 0.03   # 익절 +3%
+
+  # 거래 필터(원하면 조절)
+  avoid_funding_minutes: 0    # 펀딩 직전/직후 회피 분(0이면 사용 안 함)
+  trade_window_kst: ["00:00", "23:59"]
+
+  # 전략 로더(커스텀 전략 교체용)
+  strategy_loader: "src.strategy"
+
 risk:
   risk_per_trade: 0.01
   max_daily_dd: -0.03
   max_concurrent_positions: 2
+  max_notional_per_symbol: 0  # 0이면 제한 없음(원하면 USDT 금액 상한 넣기)
+
+execution:
+  working_type: MARK_PRICE
+  tp_levels_r: []       # percent 모드에선 미사용
+  tp_sizes: []
+  use_trailing: false
+  trail_callback_rate: 0.8
+  use_stop_entry: false
+
 notify:
   discord: true
+
 runtime:
   kst_tz: Asia/Seoul
-  align_to_candle: false
+  align_to_candle: true
   run_on_minutes: [0, 15, 30, 45]
+
 storage:
   state_file: data/state.json
